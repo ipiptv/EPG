@@ -179,7 +179,6 @@ def get_epg(channel, dt, func_arg=0):
 def gen_xml(sort):
     if cname:  #测试时不生成
         return 0
-    os.makedirs(dirs['share'], exist_ok=True)  #输出目录不存在时自动创建
     xmlhead = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE tv SYSTEM "http://api.torrent-tv.ru/xmltv.dtd"><tv generator-info-name="http://epg.51zmt.top:8000" generator-info-url="QQ 31849627">'
     xmlbottom = '</tv>'
     get_days = crawl_info['gen_xml_days']
