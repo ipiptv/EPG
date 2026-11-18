@@ -31,6 +31,8 @@ jobs:
         run: python main.py
 
       - name: 发布到 output 分支
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
           ls -l download || true
