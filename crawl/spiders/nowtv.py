@@ -1,7 +1,11 @@
 #-*- coding:utf-8 -*-
 import requests,re,datetime,json,os
 from utils.general import headers
-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+try:
+    requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+except AttributeError:
+    # 新版 urllib3 (2.x) 已经没有 DEFAULT_CIPHERS，跳过即可
+    pass
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36',
     'X-Requested-With':'XMLHttpRequest',

@@ -1,0 +1,5 @@
+django==4.2.16
+requests
+beautifulsoup4
+lxml
+python-dateutil

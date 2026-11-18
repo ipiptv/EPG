@@ -1,0 +1,45 @@
+name: EPG 节目单生成
+
+on:
+  schedule:
+    # 每天 21:00 UTC = 北京时间 05:00，生成今明两天的节目单
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 抓取节目单并生成 XML
+        run: python main.py
+
+      - name: 发布到 output 分支
+        run: |
+          set -e
+          ls -l download || true
+          rm -rf /tmp/out && mkdir -p /tmp/out
+          cp download/*.xml /tmp/out/ 2>/dev/null || true
+          cd /tmp/out
+          git init -q -b output
+          git add -A
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "epg $(date -u +%Y-%m-%dT%H:%MZ)" || echo "无文件可发布"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" output
