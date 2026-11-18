@@ -30,6 +30,9 @@ jobs:
       - name: 抓取节目单并生成 XML
         run: python main.py
 
+      - name: 频道 id 对齐（便于播放器按 tvg-id 匹配）
+        run: python tools/normalize_ids.py download/*.xml
+
       - name: 发布到 output 分支
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
